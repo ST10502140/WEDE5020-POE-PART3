@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products & Services - SM Poultry</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2e6f40;
+            --primary-dark: #22532f;
+            --secondary: #e6a100;
+            --secondary-hover: #c78b00;
+            --dark: #222222;
+            --light: #f4f7f4;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --whatsapp-color: #25D366;
+            --whatsapp-hover: #1ebd59;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after, 
+        nav a.active::after {
+            width: 100%;
+        }
+
+        nav a:hover, 
+        nav a.active {
+            color: var(--secondary);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(rgba(46, 111, 64, 0.9), rgba(34, 83, 47, 0.9)), 
+                        url('https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .page-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-banner p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* --- Controls Section (Filter & Search) --- */
+        .controls-container {
+            max-width: 1100px;
+            margin: 2rem auto 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 2.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            background: var(--white);
+            border: 1px solid #ddd;
+            padding: 0.5rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--dark);
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background-color: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+
+        /* --- Container Layout & Grid --- */
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto 3rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- Product Card Styling --- */
+        .product-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .product-card.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background-color: #eee;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background-color: var(--secondary);
+            color: var(--dark);
+            padding: 0.3rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-radius: 20px;
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .product-details {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-details h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.25rem;
+        }
+
+        .product-details p {
+            color: #555;
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+            flex: 1;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-inquire {
+            flex: 1;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.65rem;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .btn-inquire:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-whatsapp-icon {
+            background-color: var(--whatsapp-color);
+            color: var(--white);
+            border: none;
+            padding: 0.65rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .btn-whatsapp-icon:hover {
+            background-color: var(--whatsapp-hover);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #777;
+            display: none;
+            grid-column: 1 / -1;
+        }
+
+        /* --- Quick Order Modal --- */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--dark);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1.2rem;
+        }
+
+        /* --- Back to Top Button --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-dark);
+                padding: 1.5rem 0;
+                gap: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                margin: 0;
+            }
+
+            .controls-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-buttons {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-feather-pointed"></i> SM Poultry
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <nav id="nav-list">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html" class="active">Products</a>
+            <a href="education.html">Farming Guides</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="page-banner">
+        <h1>Product & Services Catalogue</h1>
+        <p>High-quality poultry, fresh eggs, and essential farm feeds in Mthatha</p>
+    </div>
+
+    <!-- Controls Bar -->
+    <div class="controls-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search products (e.g. eggs, feed, chicks)...">
+        </div>
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-category="all">All Items</button>
+            <button class="filter-btn" data-category="Breeding & Stock">Chicks & Hens</button>
+            <button class="filter-btn" data-category="Fresh Produce">Eggs</button>
+            <button class="filter-btn" data-category="Nutrition">Feed</button>
+            <button class="filter-btn" data-category="Live & Processed">Live & Meat</button>
+        </div>
+    </div>
+
+    <!-- Products Grid Container -->
+    <div class="container">
+        <div class="grid" id="productGrid">
+
+            <!-- Day-Old Chicks -->
+            <div class="product-card" data-category="Breeding & Stock" data-name="day-old chicks">
+                <div class="image-container">
+                    <img src="https://alfachicks.co.za/assets/img/seo/article-2.webp" alt="Day-Old Chicks" class="product-image">
+                    <span class="badge">Breeding & Stock</span>
+                </div>
+                <div class="product-details">
+                    <h3>Day-Old Chicks</h3>
+                    <p>Strong, healthy, and vaccinated day-old broiler and layer chicks ready for brooding and rearing.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Day-Old Chicks')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Day-Old%20Chicks." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Point-of-Lay Hens -->
+            <div class="product-card" data-category="Breeding & Stock" data-name="point-of-lay hens">
+                <div class="image-container">
+                    <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=800&q=80" alt="Point-of-Lay Hens" class="product-image">
+                    <span class="badge">Breeding & Stock</span>
+                </div>
+                <div class="product-details">
+                    <h3>Point-of-Lay Hens</h3>
+                    <p>Mature layer hens nearing egg-production age. Ideal for smallholders and backyard egg producers.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Point-of-Lay Hens')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Point-of-Lay%20Hens." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Eggs -->
+            <div class="product-card" data-category="Fresh Produce" data-name="table eggs fresh">
+                <div class="image-container">
+                    <img src="https://melotrading.co.za/wp-content/uploads/2025/11/1000246649.jpg" alt="Table Eggs" class="product-image">
+                    <span class="badge">Fresh Produce</span>
+                </div>
+                <div class="product-details">
+                    <h3>Table Eggs</h3>
+                    <p>Fresh, farm-collected eggs available in trays for households, bakeries, and local food vendors.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Table Eggs')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Table%20Eggs." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Poultry Feed -->
+            <div class="product-card" data-category="Nutrition" data-name="poultry feed starter grower finisher">
+                <div class="image-container">
+                    <img src="https://epol.co.za/wp-content/uploads/2024/07/202005592_epol_broiler_25kg.jpg" alt="Poultry Feed" class="product-image">
+                    <span class="badge">Nutrition</span>
+                </div>
+                <div class="product-details">
+                    <h3>Poultry Feed</h3>
+                    <p>Formulated starter, grower, and finisher feeds designed for optimal chick growth and egg yield.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Poultry Feed')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Poultry%20Feed." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Broilers & Cornish -->
+            <div class="product-card" data-category="Live & Processed" data-name="live broilers cornish chicken">
+                <div class="image-container">
+                    <img src="https://cax-wp-farmers-prod-uploads.s3.amazonaws.com/app/uploads/2022/02/Broiler-chicken_lindi-Botha.jpg" alt="Live Broiler Chickens" class="product-image">
+                    <span class="badge">Live & Processed</span>
+                </div>
+                <div class="product-details">
+                    <h3>Live Broilers & Cornish</h3>
+                    <p>Healthy, fully grown live Cornish and Broiler chickens ready for market or homestead consumption.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Live Broilers & Cornish')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Live%20Broilers%20%26%20Cornish." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slaughtered & Processed Birds -->
+            <div class="product-card" data-category="Live & Processed" data-name="slaughtered processed chicken whole meat">
+                <div class="image-container">
+                    <img src="https://content.app-sources.com/s/99335420081139658/uploads/Chicken/Tip_Top_Meat_Whole_Chicken_-_Buy_Whole_Chicken_Online_Butcher_Near_me-9942358.jpg" alt="Processed Whole Chicken" class="product-image">
+                    <span class="badge">Live & Processed</span>
+                </div>
+                <div class="product-details">
+                    <h3>Slaughtered & Processed Birds</h3>
+                    <p>Hygienically slaughtered, cleaned, and packaged Cornish and Broiler chickens ready for cooking.</p>
+                    <div class="card-actions">
+                        <button class="btn-inquire" onclick="openInquiryModal('Slaughtered & Processed Birds')">
+                            <i class="fa-solid fa-envelope"></i> Inquire
+                        </button>
+                        <a href="https://wa.me/27721716770?text=Hi%20SM%20Poultry,%20I%20am%20interested%20in%20Processed%20Birds." target="_blank" class="btn-whatsapp-icon" title="Chat on WhatsApp">
+                            <i class="fa-brands fa-whatsapp fa-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fallback No Items Found Message -->
+            <div id="noResults" class="no-results">
+                <i class="fa-solid fa-box-open fa-3x" style="margin-bottom: 1rem; color: #ccc;"></i>
+                <p>No products match your search or filter selection.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Quick Inquiry Modal Dialog -->
+    <div class="modal" id="inquiryModal">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h2>Product Inquiry</h2>
+            <p>Request current stock availability or pricing for: <strong id="modalProductName" style="color: var(--primary);"></strong></p>
+            
+            <form onsubmit="handleModalSubmit(event)">
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem;">Your Name</label>
+                    <input type="text" id="modalName" required placeholder="Enter full name" style="width:100%; padding: 0.6rem; border:1px solid #ccc; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem;">Phone / WhatsApp</label>
+                    <input type="tel" id="modalPhone" required placeholder="e.g. 072 171 6770" style="width:100%; padding: 0.6rem; border:1px solid #ccc; border-radius: 6px;">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem;">Quantity Needed / Questions</label>
+                    <textarea id="modalMessage" rows="3" placeholder="Specify quantities or details..." style="width:100%; padding: 0.6rem; border:1px solid #ccc; border-radius: 6px;"></textarea>
+                </div>
+                <button type="submit" class="btn-inquire" style="width: 100%; padding: 0.8rem;">Send WhatsApp Inquiry</button>
+            </form>
+        </div>
+    </div>
+
+    <a href="#" class="back-to-top" id="backToTop"><i class="fa-solid fa-arrow-up"></i></a>
+
+    <footer>
+        <p>&copy; 2026 SM Poultry. Founded by Siyasanga Mananga. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        // 2. Filter & Live Search Logic
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('searchInput');
+        const productCards = document.querySelectorAll('.product-card');
+        const noResults = document.getElementById('noResults');
+
+        let activeCategory = 'all';
+
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            productCards.forEach(card => {
+                const category = card.getAttribute('data-category');
+                const name = card.getAttribute('data-name');
+
+                const matchesCategory = (activeCategory === 'all' || category === activeCategory || (activeCategory === 'Live & Processed' && category === 'Live & Processed'));
+                const matchesSearch = name.includes(searchTerm) || card.querySelector('h3').innerText.toLowerCase().includes(searchTerm);
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+        }
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                activeCategory = btn.getAttribute('data-category');
+                filterProducts();
+            });
+        });
+
+        searchInput.addEventListener('input', filterProducts);
+
+        // 3. Scroll Animations & Reveal Cards
+        const revealCards = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            productCards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                if (cardTop < triggerBottom) {
+                    card.classList.add('reveal');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealCards);
+        window.addEventListener('load', revealCards);
+
+        // 4. Modal Handling
+        const inquiryModal = document.getElementById('inquiryModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalProductName = document.getElementById('modalProductName');
+        let selectedProduct = '';
+
+        function openInquiryModal(productName) {
+            selectedProduct = productName;
+            modalProductName.innerText = productName;
+            inquiryModal.classList.add('active');
+        }
+
+        closeModal.addEventListener('click', () => {
+            inquiryModal.classList.remove('active');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === inquiryModal) {
+                inquiryModal.classList.remove('active');
+            }
+        });
+
+        function handleModalSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('modalName').value;
+            const phone = document.getElementById('modalPhone').value;
+            const message = document.getElementById('modalMessage').value;
+
+            const text = `Hello SM Poultry!%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Inquiry Product:* ${encodeURIComponent(selectedProduct)}%0A*Message:* ${encodeURIComponent(message)}`;
+
+            window.open(`https://wa.me/27721716770?text=${text}`, '_blank');
+            inquiryModal.classList.remove('active');
+        }
+
+        // 5. Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

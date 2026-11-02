@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SM Poultry</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2e6f40;
+            --primary-dark: #22532f;
+            --secondary: #e6a100;
+            --secondary-hover: #c78b00;
+            --dark: #222222;
+            --light: #f4f7f4;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --whatsapp-color: #25D366;
+            --whatsapp-hover: #1ebd59;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after, 
+        nav a.active::after {
+            width: 100%;
+        }
+
+        nav a:hover, 
+        nav a.active {
+            color: var(--secondary);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(rgba(46, 111, 64, 0.9), rgba(34, 83, 47, 0.9)), 
+                        url('https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .page-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-banner p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* --- Container Layout --- */
+        .container {
+            max-width: 1050px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .info-box, .form-box {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .info-box.reveal, .form-box.reveal, .map-section.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .info-box h2, .form-box h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 0.5rem;
+        }
+
+        /* --- Contact List Styling --- */
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .contact-icon {
+            background: var(--light);
+            color: var(--primary);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .contact-text strong {
+            display: block;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+
+        .contact-text p, .contact-text a {
+            color: #555;
+            font-size: 0.95rem;
+            text-decoration: none;
+        }
+
+        .contact-text a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        /* Direct WhatsApp Button */
+        .whatsapp-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: var(--whatsapp-color);
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            transition: var(--transition);
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-btn:hover {
+            background-color: var(--whatsapp-hover);
+            transform: translateY(-2px);
+        }
+
+        /* --- Form Components --- */
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .form-group input:focus, 
+        .form-group select:focus, 
+        .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(46, 111, 64, 0.15);
+        }
+
+        .btn-submit {
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.85rem 1.5rem;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Response Feedback Message */
+        .form-status {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: none;
+            text-align: center;
+        }
+
+        .form-status.success {
+            display: block;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* --- Map Section --- */
+        .map-section {
+            max-width: 1050px;
+            margin: 0 auto 3rem auto;
+            padding: 0 1.5rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .map-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        .map-container h2 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 380px;
+            border: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* --- Back to Top Button --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+        }
+
+        /* Keyframes */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-dark);
+                padding: 1.5rem 0;
+                gap: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-feather-pointed"></i> SM Poultry
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <nav id="nav-list">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="education.html">Farming Guides</a>
+            <a href="contact.html" class="active">Contact</a>
+        </nav>
+    </header>
+
+    <div class="page-banner">
+        <h1>Contact & Order Inquiries</h1>
+        <p>Get in touch to check product availability or place an order in Mthatha</p>
+    </div>
+
+    <div class="container">
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <h2><i class="fa-solid fa-address-card"></i> Get In Touch</h2>
+            <ul class="contact-list">
+                <li class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-user"></i></div>
+                    <div class="contact-text">
+                        <strong>Owner & Founder</strong>
+                        <p>Siyasanga Mananga</p>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-location-dot"></i></div>
+                    <div class="contact-text">
+                        <strong>Location</strong>
+                        <p>Mthatha, Eastern Cape</p>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+                    <div class="contact-text">
+                        <strong>Phone / WhatsApp</strong>
+                        <p><a href="tel:+27721716770">+27 72 171 6770</a></p>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-people-group"></i></div>
+                    <div class="contact-text">
+                        <strong>Target Customers</strong>
+                        <p>Smallholders, homesteaders, households, restaurants, and local vendors.</p>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <div class="contact-icon"><i class="fa-solid fa-clock"></i></div>
+                    <div class="contact-text">
+                        <strong>Operating Hours</strong>
+                        <p>Monday - Saturday: 08:00 - 17:00</p>
+                    </div>
+                </li>
+            </ul>
+
+            <a href="https://wa.me/27721716770?text=Hello%20SM%20Poultry,%20I%20would%20like%20to%20inquire%20about%20your%20products." 
+               target="_blank" 
+               class="whatsapp-btn">
+                <i class="fa-brands fa-whatsapp fa-lg"></i> Chat Directly on WhatsApp
+            </a>
+        </div>
+
+        <!-- Contact / Inquiry Form -->
+        <div class="form-box">
+            <h2><i class="fa-solid fa-paper-plane"></i> Send an Inquiry</h2>
+            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" required placeholder="Enter your full name">
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone / WhatsApp Number</label>
+                    <input type="tel" id="phone" required placeholder="e.g. 072 171 6770">
+                </div>
+
+                <div class="form-group">
+                    <label for="product">Product Interested In</label>
+                    <select id="product">
+                        <option value="Day-Old Chicks">Day-Old Chicks</option>
+                        <option value="Point-of-Lay Hens">Point-of-Lay Hens</option>
+                        <option value="Table Eggs">Table Eggs</option>
+                        <option value="Poultry Feed">Poultry Feed</option>
+                        <option value="Live Cornish / Broiler">Live Cornish / Broiler</option>
+                        <option value="Processed Cornish / Broiler">Processed Cornish / Broiler</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Order Quantity / Message</label>
+                    <textarea id="message" rows="4" placeholder="Specify quantities or ask any questions..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Inquiry
+                </button>
+                <div id="formStatus" class="form-status"></div>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Map Section -->
+    <div class="map-section">
+        <div class="map-container">
+            <h2><i class="fa-solid fa-map-location-dot"></i> Find Us in Mthatha</h2>
+            <p style="color: #555;">Serving Mthatha and surrounding Eastern Cape communities.</p>
+            <iframe 
+                class="map-frame" 
+                src="https://maps.google.com/maps?q=Mthatha,Eastern%20Cape&t=&z=13&ie=UTF8&iwloc=&output=embed" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+
+    <a href="#" class="back-to-top" id="backToTop"><i class="fa-solid fa-arrow-up"></i></a>
+
+    <footer>
+        <p>&copy; 2026 SM Poultry. Founded by Siyasanga Mananga. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        // 2. Reveal Scroll Animation
+        const elementsToReveal = document.querySelectorAll('.info-box, .form-box, .map-section');
+
+        const revealOnScroll = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            elementsToReveal.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if (elementTop < triggerBottom) {
+                    el.classList.add('reveal');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll);
+
+        // 3. Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // 4. Contact Form Handler (Option to send directly via WhatsApp or submit)
+        function handleContactSubmit(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const product = document.getElementById('product').value;
+            const message = document.getElementById('message').value;
+
+            const statusDiv = document.getElementById('formStatus');
+
+            // Format message for WhatsApp redirection option
+            const whatsappMsg = `Hello SM Poultry!%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Phone:* ${encodeURIComponent(phone)}%0A*Product:* ${encodeURIComponent(product)}%0A*Message:* ${encodeURIComponent(message)}`;
+            
+            // Show inline success message
+            statusDiv.className = "form-status success";
+            statusDiv.innerHTML = `<strong>Thank you, ${name}!</strong> Your inquiry for <em>${product}</em> has been prepared. <br><br> <a href="https://wa.me/27721716770?text=${whatsappMsg}" target="_blank" style="color:#155724; font-weight:bold; text-decoration:underline;">Click here to send directly via WhatsApp</a>`;
+
+            // Reset Form Fields
+            document.getElementById('contactForm').reset();
+        }
+    </script>
+</body>
+</html>

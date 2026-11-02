@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farming Guides - SM Poultry</title>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2e6f40;
+            --primary-dark: #22532f;
+            --secondary: #e6a100;
+            --secondary-hover: #c78b00;
+            --dark: #222222;
+            --light: #f4f7f4;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- Header & Navigation --- */
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.2rem 0;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        nav a:hover::after, 
+        nav a.active::after {
+            width: 100%;
+        }
+
+        nav a:hover, 
+        nav a.active {
+            color: var(--secondary);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            cursor: pointer;
+        }
+
+        /* --- Reading Progress Bar --- */
+        .progress-bar {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            height: 4px;
+            background: var(--secondary);
+            width: 0%;
+            z-index: 999;
+            transition: width 0.1s ease;
+        }
+
+        /* --- Page Banner --- */
+        .page-banner {
+            background: linear-gradient(rgba(46, 111, 64, 0.9), rgba(34, 83, 47, 0.9)), 
+                        url('https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 1rem;
+        }
+
+        .page-banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .page-banner p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        /* --- Search & Filter Section --- */
+        .search-container {
+            max-width: 900px;
+            margin: 2rem auto 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1.2rem 0.9rem 3rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 30px;
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1.2rem;
+            color: #888;
+            font-size: 1.1rem;
+        }
+
+        /* --- Main Content Layout --- */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto 3rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+        }
+
+        /* --- Guide Accordion Post --- */
+        .guide-post {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .guide-post.reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .guide-header {
+            padding: 1.5rem;
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .guide-header:hover {
+            background-color: #f8faf8;
+        }
+
+        .guide-header h2 {
+            color: var(--primary);
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .guide-header .toggle-icon {
+            color: var(--primary);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .guide-post.open .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .guide-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 1.5rem;
+            background: var(--white);
+            border-top: 1px solid transparent;
+        }
+
+        .guide-post.open .guide-content {
+            max-height: 500px; /* Adjust according to content height */
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        .guide-content p {
+            color: #444;
+            margin-bottom: 0.8rem;
+        }
+
+        .guide-content ul {
+            margin-left: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .guide-content ul li {
+            color: #555;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 2rem;
+            color: #777;
+            display: none;
+        }
+
+        /* --- Back to Top Button --- */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--primary);
+            color: var(--white);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            z-index: 999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Media Queries */
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background-color: var(--primary-dark);
+                padding: 1.5rem 0;
+                gap: 1rem;
+                box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav a {
+                margin: 0;
+            }
+
+            .guide-header h2 {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Scroll Reading Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <header>
+        <div class="logo">
+            <i class="fa-solid fa-feather-pointed"></i> SM Poultry
+        </div>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+        <nav id="nav-list">
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="products.html">Products</a>
+            <a href="education.html" class="active">Farming Guides</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <div class="page-banner">
+        <h1>Poultry Farming Resources</h1>
+        <p>Practical advice and tips for small-scale farmers and homesteaders</p>
+    </div>
+
+    <!-- Live Search Input -->
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Search guides (e.g., brooding, feed, biosecurity)...">
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- Guide Post 1 -->
+        <article class="guide-post open">
+            <div class="guide-header">
+                <h2><i class="fa-solid fa-temperature-arrow-up"></i> 1. Brooding Day-Old Chicks: Key Success Factors</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="guide-content">
+                <p>The first 7–14 days are critical for chick survival. Keep these essentials in mind:</p>
+                <ul>
+                    <li><strong>Temperature:</strong> Maintain brooding heat (around 32°C–35°C in the first week) using heat lamps or gas brooders.</li>
+                    <li><strong>Clean Water:</strong> Provide fresh water mixed with vitamins/electrolytes upon arrival.</li>
+                    <li><strong>Bedding:</strong> Use dry, clean wood shavings to keep chicks warm and absorb moisture.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Guide Post 2 -->
+        <article class="guide-post">
+            <div class="guide-header">
+                <h2><i class="fa-solid fa-bowl-food"></i> 2. Feeding Management for Fast Growth</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="guide-content">
+                <p>Matching feed to growth stages ensures healthy development and optimal feed conversion:</p>
+                <ul>
+                    <li><strong>Broiler Starter:</strong> High protein feed for weeks 1 to 3.</li>
+                    <li><strong>Broiler Grower/Finisher:</strong> Formulated for weight gain from week 4 onwards.</li>
+                    <li><strong>Layer Feed:</strong> Rich in calcium to support strong shell development once hens reach laying age.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Guide Post 3 -->
+        <article class="guide-post">
+            <div class="guide-header">
+                <h2><i class="fa-solid fa-shield-virus"></i> 3. Simple Biosecurity Rules for Small Farms</h2>
+                <i class="fa-solid fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="guide-content">
+                <p>Prevent disease outbreaks before they start with basic sanitation practices:</p>
+                <ul>
+                    <li>Restrict visitor access to your coop area.</li>
+                    <li>Clean and sanitize feeders and drinkers regularly.</li>
+                    <li>Isolate sick birds immediately to prevent disease spread.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Search Fallback Message -->
+        <div id="noResults" class="no-results">
+            <i class="fa-solid fa-file-circle-xmark fa-2x" style="margin-bottom: 0.5rem; color: #aaa;"></i>
+            <p>No guides match your search query. Try searching for different keywords.</p>
+        </div>
+
+    </div>
+
+    <a href="#" class="back-to-top" id="backToTop"><i class="fa-solid fa-arrow-up"></i></a>
+
+    <footer>
+        <p>&copy; 2026 SM Poultry. Founded by Siyasanga Mananga. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Mobile Menu Navigation Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navList = document.getElementById('nav-list');
+
+        mobileMenu.addEventListener('click', () => {
+            navList.classList.toggle('active');
+            const icon = mobileMenu.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+
+        // 2. Accordion Functionality
+        const guidePosts = document.querySelectorAll('.guide-post');
+
+        guidePosts.forEach(post => {
+            const header = post.querySelector('.guide-header');
+            header.addEventListener('click', () => {
+                // Toggle current accordion
+                post.classList.toggle('open');
+            });
+        });
+
+        // 3. Live Search Filter
+        const searchInput = document.getElementById('searchInput');
+        const noResultsMsg = document.getElementById('noResults');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            let matches = 0;
+
+            guidePosts.forEach(post => {
+                const text = post.innerText.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    post.style.display = 'block';
+                    matches++;
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+
+            noResultsMsg.style.display = matches === 0 ? 'block' : 'none';
+        });
+
+        // 4. Scroll Reveal & Reading Progress Bar
+        const progressBar = document.getElementById('progressBar');
+
+        const revealGuides = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+
+            guidePosts.forEach(post => {
+                const postTop = post.getBoundingClientRect().top;
+                if (postTop < triggerBottom) {
+                    post.classList.add('reveal');
+                }
+            });
+
+            // Update Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        };
+
+        window.addEventListener('scroll', revealGuides);
+        window.addEventListener('load', revealGuides);
+
+        // 5. Back to Top Button
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>
